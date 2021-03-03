@@ -20,6 +20,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'active',
+        'last_login_time',
+        'last_login_ip'
     ];
 
     /**
@@ -30,6 +33,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'user'
+
     ];
 
     /**
@@ -40,4 +45,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function isAdministrator()
+    {
+        if ($this->isAdmin === 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getActiveAttribute($value)
+    {
+        return ucfirst($value);
+    }
 }

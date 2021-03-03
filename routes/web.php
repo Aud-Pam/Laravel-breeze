@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\User\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['middleware'=>'auth'],function ()
+{
+    Route::get('/dashboard', function () {
+    return view('dashboard');})->name('dashboard');
+    Route::get('user/profile',[UserProfileController::class,'index'])->name('profile');
+});
+
+Route::group(['middleware'=>'isAdmin'],function ()
+{
+    Route::get('admin/dashboard',[AdminUserController::class,'index'])->name('admin.dashboard');
+    Route::get('admin/edit-profile/{id}',[AdminUserController::class,'edit'])->name('edit.profile');
+});
+
+require __DIR__.'/auth.php';
